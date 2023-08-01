@@ -1,0 +1,102 @@
+﻿@{
+    ViewBag.Title = "Users";
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        td, th {
+            padding: 10px;
+        }
+    </style>
+    <script>
+        var data;
+        $(document).ready(function () {
+            $("#btn-ajax").click(function () {
+                var token = localStorage.getItem("token");
+                $.ajax({
+                    url: "https://localhost:44341/api/users",
+                    type: "GET",
+                    dataType: 'json',
+                    success: function (response) {
+                        if (data == null ) {
+                            data = response;
+                            convert();
+                        }
+                    },
+                    beforeSend: function (xhr, settings) { xhr.setRequestHeader('Authorization', 'Bearer ' + token); },
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 401) {
+                            $("#response").text("Lütfen önce giriş yapın.");
+                        } else {
+                            $("#response").text("Hata: " + error);
+                        }
+                    }
+                });
+            });
+            $("#btn-logout").click(function () {
+                localStorage.removeItem("token");
+            });
+
+
+            
+            if (localStorage.getItem("token") == null) {
+                alert("Lütfen önce giriş yapın.");
+                location.href = "/Home/Login";
+            }
+        });
+
+        function convert() {
+            let container = $("#container");
+            let table = $("<table>");
+            let cols = Object.keys(data[0]);
+            let thead = $("<thead>");
+            let tr = $("<tr>");
+            $.each(cols, function (i, item) {
+                let th = $("<th>");
+                th.text(item);
+                tr.append(th);
+            });
+            thead.append(tr);
+            table.append(tr)
+
+            $.each(data, function (i, item) {
+                let tr = $("<tr>");
+
+                let vals = Object.values(item);
+
+                $.each(vals, (i, elem) => {
+                    let td = $("<td>");
+                    td.text(elem);
+                    tr.append(td);
+                });
+                table.append(tr);
+            });
+            container.append(table)
+        }
+    </script>
+</head>
+<body>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+            <button id="btn-ajax" class="btn btn-primary">Kullanıcılar</button>
+            <div id="response"></div>
+            <div id="container"></div>
+        </div>
+        <div class="col-md-4">
+            <div id="logout" class="row">
+                <a href="~/Home/Login" class="btn btn-danger" id="btn-logout">Çıkış Yap</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
