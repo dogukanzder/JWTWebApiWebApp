@@ -1,6 +1,6 @@
 # JWTWebApiWebApp
 
-##Secure MVC Web Application & API with JWT Authentication
+## Secure MVC Web Application & API with JWT Authentication
 
 JWTWebApiWebApp is a feature-rich and secure MVC web application and API, meticulously designed and implemented in .NET Framework 4.7.2. The project emphasizes robust security with JWT authentication 2.0, ensuring that user data and interactions remain confidential and protected from unauthorized access. By utilizing the power of JSON Web Tokens (JWT), this application offers a seamless, stateless, and scalable authentication mechanism.
 
